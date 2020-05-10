@@ -17,6 +17,11 @@
         .table {
             width: 80%;
         }
+        .brand {
+            font-style: italic;
+            font-weight: bold;
+            color: blue;
+        }
     </style>
 </head>
 <body>
@@ -67,7 +72,7 @@
             <% }) %>
         </ul>
     <% } else { %>
-        <p>No definitions found for <span><%= results.brand %></span></p>
+        <p>No definitions found for <span class="brand"><%= results.brand %></span></p>
     <% } %>
 </main>
 
