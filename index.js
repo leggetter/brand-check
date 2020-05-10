@@ -12,7 +12,8 @@ async function checkBrand(brand) {
         github: {available: null},
         dotcom: {available: null},
         dotio: {available: null},
-        dotco: {available: null}
+        dotco: {available: null},
+        urban_dictionary: {has_matches: null, matches: null}
     }
 
     try {
@@ -71,6 +72,16 @@ async function checkBrand(brand) {
         console.error('unexpected error getting .co status')
     }
 
+    try {
+        const urban = await axios.get(`http://api.urbandictionary.com/v0/define?term=${brand}`)
+        results.urban_dictionary.has_matches = urban.data.list.length > 0
+        results.urban_dictionary.matches = urban.data.list
+    }
+    catch(error) {
+        console.error(`error for Urban Dictionary:${brand}`)
+        console.error(error)
+    }
+
     console.log(results)
 
     return results
@@ -97,9 +108,19 @@ async function domainr(brand, tld) {
 const express = require("express");
 const app = express();
 
+app.set('view engine', 'ejs');
+
 app.get("/check/:brand", async (request, response) => {
+    // console.log(request);
+
     const checkResult = await checkBrand(request.params.brand)
-    response.json(checkResult)
+
+    if(request.accepts('html')) {
+        response.render('pages/index', {results: checkResult});
+    }
+    else {
+        response.json(checkResult)
+    }
 })
 
 app.get('/', (request, response) => {

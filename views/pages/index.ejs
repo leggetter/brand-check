@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Brand Check for <span class="brand"><%= results.brand %></title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <style>
+        body {
+            padding: 1%;
+        }
+        .table {
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+
+<header class="container">
+    <h1>Brand Check for <span class="brand"><%= results.brand %></span></h1>
+</header>
+
+<main class="container">
+    <h2>Asset Availability</h2>
+    <table class="table table-striped table-dark table-sm">
+        <thead>
+            <tr>
+              <th scope="col">Asset</th>
+              <th scope="col">Available</th>
+            </tr>
+          </thead>
+        <tbody>
+            <tr scope="row">
+                <td>Twitter</td>
+                <td><%= results.twitter.available? '✅' : '❌' %></td>
+            </tr>
+            <tr scope="row">
+                <td>GitHub</td>
+                <td><%= results.github.available? '✅' : '❌' %></td>
+            </tr>
+            <tr scope="row">
+                <td>.com</td>
+                <td><%= results.dotcom.available? '✅' : '❌' %></td>
+            </tr>
+            <tr scope="row">
+                <td>.io</td>
+                <td><%= results.dotio.available? '✅' : '❌' %></td>
+            </tr>
+            <tr scope="row">
+                <td>.co</td>
+                <td><%= results.dotco.available? '✅' : '❌' %></td>
+            </tr>
+        </tbody>   
+    </table>
+
+    <h2>Existing Branding</h2>
+    <h3>Urban Dictionary</h3>
+    <% if (results.urban_dictionary.has_matches) { %>
+        <ul>
+            <% results.urban_dictionary.matches.forEach( entry => { %>
+                <li><%= entry.definition %></li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No definitions found for <span><%= results.brand %></span></p>
+    <% } %>
+</main>
+
+<footer>
+</footer>
+
+</body>
+</html>
