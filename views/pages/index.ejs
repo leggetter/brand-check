@@ -27,9 +27,12 @@
 <body>
 
 <header class="container">
-    <h1>Brand Check for <span class="brand"><%= results.brand %></span></h1>
+    <form action="/check" method="get">
+        <h1>Brand Check for <input id="brand_input" class="brand" name="brand" value="<%= results.brand %>" placeholder="brand name" /></h1>
+    </form>
 </header>
 
+<% if( results.brand ) { %>
 <main class="container">
     <h2>Asset Availability</h2>
     <table class="table table-striped table-dark table-sm">
@@ -75,9 +78,26 @@
         <p>No definitions found for <span class="brand"><%= results.brand %></span></p>
     <% } %>
 </main>
+<% } %>
 
 <footer>
 </footer>
+
+<script>
+    const brandInput = document.getElementById('brand_input')
+    brandInput.addEventListener('focus', (ev) => {
+        const el = ev.target
+        el.oldValue = el.value
+        el.value = ''
+    })
+
+    brandInput.addEventListener('blur', (ev) => {
+        const el = ev.target
+        if(!el.value || !el.value.trim()) {
+            el.value = el.oldValue
+        }
+    })
+</script>
 
 </body>
 </html>

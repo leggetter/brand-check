@@ -110,10 +110,16 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
-app.get("/check/:brand", async (request, response) => {
+app.get("/check", handleCheck)
+
+app.get("/check/:brand", handleCheck)
+
+async function handleCheck (request, response) {
     // console.log(request);
 
-    const checkResult = await checkBrand(request.params.brand)
+    const brand = request.params.brand || request.query.brand
+
+    const checkResult = await checkBrand(brand)
 
     if(request.accepts('html')) {
         response.render('pages/index', {results: checkResult});
@@ -121,7 +127,7 @@ app.get("/check/:brand", async (request, response) => {
     else {
         response.json(checkResult)
     }
-})
+}
 
 app.get('/', (request, response) => {
     response.json({hello: 'world'})
