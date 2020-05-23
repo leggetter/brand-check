@@ -3,6 +3,8 @@
 <head>
     <title>Brand Check for <%= results.brand %></title>
 
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -44,11 +46,11 @@
           </thead>
         <tbody>
             <tr scope="row">
-                <td>Twitter</td>
+                <td><a href="https://twitter.com/<%= results.brand %>">Twitter</a></td>
                 <td><%= results.twitter.available? '✅' : '❌' %></td>
             </tr>
             <tr scope="row">
-                <td>GitHub</td>
+                <td><a href="https://github.com/<%= results.brand %>">GitHub</a></td>
                 <td><%= results.github.available? '✅' : '❌' %></td>
             </tr>
             <tr scope="row">
@@ -88,7 +90,7 @@
     brandInput.addEventListener('focus', (ev) => {
         const el = ev.target
         el.oldValue = el.value
-        el.value = ''
+        el.select()
     })
 
     brandInput.addEventListener('blur', (ev) => {

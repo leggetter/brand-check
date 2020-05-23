@@ -82,7 +82,8 @@ async function checkBrand(brand) {
         console.error(error)
     }
 
-    console.log(results)
+    console.log('---------------------------')
+    console.log( JSON.stringify(results, null, 2) )
 
     return results
 }
@@ -110,6 +111,8 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
+app.use(express.static('public'))
+
 app.get("/check", handleCheck)
 
 app.get("/check/:brand", handleCheck)
@@ -117,7 +120,7 @@ app.get("/check/:brand", handleCheck)
 async function handleCheck (request, response) {
     // console.log(request);
 
-    const brand = request.params.brand || request.query.brand
+    const brand = (request.params.brand || request.query.brand).trim().replace(/w+/, '')
 
     const checkResult = await checkBrand(brand)
 
