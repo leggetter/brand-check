@@ -16,26 +16,79 @@
         body {
             padding: 1%;
         }
-        .table {
-            width: 80%;
-        }
+
         .brand {
             font-style: italic;
             font-weight: bold;
             color: blue;
         }
+
+        body .loader {
+            display: none;
+        }
+
+        body.loading #main_container {
+            display: none;
+        }
+
+        body.loading .loader {
+            display: block;
+        }
+
+        .loader,
+            .loader:after {
+            border-radius: 50%;
+            width: 10em;
+            height: 10em;
+        }
+        .loader {
+            margin: 60px auto;
+            font-size: 10px;
+            position: relative;
+            text-indent: -9999em;
+            border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+            border-right: 1.1em solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+            border-left: 1.1em solid black;
+            -webkit-transform: translateZ(0);
+            -ms-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-animation: load8 1.1s infinite linear;
+            animation: load8 1.1s infinite linear;
+        }
+        @-webkit-keyframes load8 {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+            }
+            @keyframes load8 {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
     </style>
 </head>
 <body>
 
 <header class="container">
-    <form action="/check" method="get">
+    <form id="brand_form" action="/check" method="get" spellcheck="false">
         <h1>Brand Check for <input id="brand_input" class="brand" name="brand" value="<%= results.brand %>" placeholder="brand name" /></h1>
     </form>
 </header>
 
 <% if( results.brand ) { %>
-<main class="container">
+<main id="main_container" class="container">
     <h2>Asset Availability</h2>
     <table class="table table-striped table-dark table-sm">
         <thead>
@@ -54,16 +107,16 @@
                 <td><%= results.github.available? '✅' : '❌' %></td>
             </tr>
             <tr scope="row">
-                <td>.com</td>
-                <td><%= results.dotcom.available? '✅' : '❌' %></td>
+                <td><a href="https://<%= results.brand %>.com">.com</a></td>
+                <td><%= results.dotcom.available? '✅' : '❌' %> (<%= results.dotcom.status %>)</td>
             </tr>
             <tr scope="row">
-                <td>.io</td>
-                <td><%= results.dotio.available? '✅' : '❌' %></td>
+                <td><a href="https://<%= results.brand %>.com">.io</a></td>
+                <td><%= results.dotio.available? '✅' : '❌' %> (<%= results.dotio.status %>)</td>
             </tr>
             <tr scope="row">
-                <td>.co</td>
-                <td><%= results.dotco.available? '✅' : '❌' %></td>
+                <td><a href="https://<%= results.brand %>.com">.co</a></td>
+                <td><%= results.dotco.available? '✅' : '❌' %> <%= results.dotco.status %>)</td>
             </tr>
         </tbody>   
     </table>
@@ -80,13 +133,21 @@
         <p>No definitions found for <span class="brand"><%= results.brand %></span></p>
     <% } %>
 </main>
+<div class="container loader"></div>
 <% } %>
 
 <footer>
 </footer>
 
 <script>
+    const brandForm = document.getElementById('brand_form')
     const brandInput = document.getElementById('brand_input')
+    const mainContainer = document.getElementById('main_container')
+
+    brandForm.addEventListener('submit', (ev) => {
+        document.body.classList.toggle('loading')
+    })
+
     brandInput.addEventListener('focus', (ev) => {
         const el = ev.target
         el.oldValue = el.value
@@ -98,6 +159,10 @@
         if(!el.value || !el.value.trim()) {
             el.value = el.oldValue
         }
+    })
+
+    document.addEventListener('DOMContentLoaded', (ev) => {
+        brandInput.focus()
     })
 </script>
 
