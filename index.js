@@ -16,6 +16,10 @@ async function checkBrand(brand) {
         urban_dictionary: {has_matches: null, matches: null}
     }
 
+    if(!brand) {
+        return results
+    }
+
     try {
         const twitter = await axios.get(`https://twitter.com/${brand}`)
         results.twitter.available = twitter.status !== 200
@@ -44,6 +48,7 @@ async function checkBrand(brand) {
 
     try {
         const dotcom = await domainr(brand, 'com')
+        console.log(dotcom)
         results.dotcom.available = dotcom.status === 'undelegated inactive'
         results.dotcom.status = dotcom.status
     }
@@ -120,7 +125,7 @@ app.get("/check/:brand", handleCheck)
 async function handleCheck (request, response) {
     // console.log(request);
 
-    const brand = (request.params.brand || request.query.brand).trim().replace(/w+/, '')
+    const brand = (request.params.brand || request.query.brand || '').trim().replace(/w+/, '')
 
     const checkResult = await checkBrand(brand)
 
