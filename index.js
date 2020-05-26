@@ -6,6 +6,8 @@ const RAPID_API_KEY = process.env.RAPID_API_KEY
 
 async function checkBrand(brand) {
 
+    console.log('checking:', brand)
+
     const results = {
         brand: brand,
         twitter: {available: null},
@@ -123,9 +125,9 @@ app.get("/check", handleCheck)
 app.get("/check/:brand", handleCheck)
 
 async function handleCheck (request, response) {
-    // console.log(request);
+    console.log(request)
 
-    const brand = (request.params.brand || request.query.brand || '').trim().replace(/w+/, '')
+    const brand = (request.params.brand || request.query.brand || '').trim().replace(/\s+/, '')
 
     const checkResult = await checkBrand(brand)
 
